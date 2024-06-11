@@ -13,6 +13,8 @@ llama-index-llms-ollama = "~0.1.0"
 llama-index-embeddings-huggingface = "~0.2.1"
 FlagEmbedding = "~1.2.10"
 torch = "~=2.2.2"
+chromadb = "^0.5.0"
+llama-index-vector-stores-chroma = "^0.1.9"
 
 [[tool.poetry.source]]
 name = "aliyun"
