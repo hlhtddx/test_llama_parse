@@ -9,8 +9,10 @@ readme = "README.md"
 python = "^3.11"
 llama-index = "~0.10.44"
 llama-index-vector-stores-milvus = "~0.1.17"
+llama-index-llms-ollama = "~0.1.0"
+llama-index-embeddings-huggingface = "~0.2.1"
 FlagEmbedding = "~1.2.10"
-torch = "2.2.2"
+torch = "~=2.2.2"
 
 [build-system]
 requires = ["poetry-core"]

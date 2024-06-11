@@ -2,8 +2,10 @@ import textwrap
 from typing import List
 
 from FlagEmbedding import BGEM3FlagModel
-from llama_index.core import StorageContext
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Document
+from llama_index.core import StorageContext, Settings
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.llms.ollama import Ollama
 from llama_index.vector_stores.milvus import MilvusVectorStore
 from llama_index.vector_stores.milvus.utils import BaseSparseEmbeddingFunction
 
@@ -41,35 +43,20 @@ class ExampleEmbeddingFunction(BaseSparseEmbeddingFunction):
 documents = SimpleDirectoryReader("./data/paul_graham/").load_data()
 
 print("Document ID:", documents[0].doc_id)
+Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-m3")
+Settings.llm = Ollama(base_url="http://10.8.0.100:11434", model="llama3", request_timeout=360.0)
 
 # Create an index over the documnts
-
 vector_store = MilvusVectorStore(
     url="http://10.8.0.100:19530/",
     dim=1536,
     overwrite=True,
     enable_sparse=True,
+    sparse_embedding_function=ExampleEmbeddingFunction(),
     hybrid_ranker="RRFRanker",
     hybrid_ranker_params={"k": 60},
 )
 
-storage_context = StorageContext.from_defaults(vector_store=vector_store)
-index = VectorStoreIndex.from_documents(
-    [Document(text="The number that is being searched for is ten.")],
-    storage_context,
-)
-query_engine = index.as_query_engine()
-res = query_engine.query("Who is the author?")
-print("Res:", res)
-
-storage_context = StorageContext.from_defaults(vector_store=vector_store)
-index = VectorStoreIndex.from_documents(
-    documents, storage_context=storage_context
-)
-
-del index, vector_store, storage_context, query_engine
-
-vector_store = MilvusVectorStore(uri="./milvus_demo.db", overwrite=False)
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 index = VectorStoreIndex.from_documents(
     documents, storage_context=storage_context
