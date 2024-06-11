@@ -6,13 +6,24 @@ authors = ["Frank Zhang <frankzhang123@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.9,<4.0"
 llama-index = "~0.10.44"
 llama-index-vector-stores-milvus = "~0.1.17"
 llama-index-llms-ollama = "~0.1.0"
 llama-index-embeddings-huggingface = "~0.2.1"
 FlagEmbedding = "~1.2.10"
 torch = "~=2.2.2"
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+priority = "primary"
 
 [build-system]
 requires = ["poetry-core"]
